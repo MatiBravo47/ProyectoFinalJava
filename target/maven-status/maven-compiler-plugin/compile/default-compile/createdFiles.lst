@@ -1,0 +1,4 @@
+com\sistemaventas\dao\ProductoDAO.class
+com\sistemaventas\util\ConexionDB.class
+com\sistemaventas\App.class
+com\sistemaventas\modelo\Producto.class
