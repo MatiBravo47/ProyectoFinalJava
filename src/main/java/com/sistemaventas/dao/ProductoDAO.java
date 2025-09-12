@@ -1,9 +1,10 @@
+//Puente entre java y base de datos
+
 package com.sistemaventas.dao;
 
 import com.sistemaventas.modelo.Producto;
 import com.sistemaventas.util.ConexionDB;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,25 +17,27 @@ public class ProductoDAO {
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
-            pstmt.setString(1, producto.getNombre());
-            pstmt.setBigDecimal(2, producto.getPrecio());
-            pstmt.setInt(3, producto.getStock());
+            pstmt.setString(1, producto.getNombre()); //Primer "?"
+            pstmt.setBigDecimal(2, producto.getPrecio());//Segundo "?"
+            pstmt.setInt(3, producto.getStock());//Tercer "?"
             
-            int filasAfectadas = pstmt.executeUpdate();
+            int filasAfectadas = pstmt.executeUpdate(); //Devuelve la cantidad de filas afectadas por la operacion
             
             if (filasAfectadas > 0) {
-                // Obtener el ID generado automáticamente
-                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        producto.setIdProducto(generatedKeys.getInt(1));
+                // Para SQLite, obtenemos el ID con una consulta separada
+                String sqlId = "SELECT last_insert_rowid() as id";
+                try (PreparedStatement pstmtId = conn.prepareStatement(sqlId);
+                     ResultSet rs = pstmtId.executeQuery()) {
+                    
+                    if (rs.next()) {
+                        producto.setIdProducto(rs.getInt("id"));
                         System.out.println("✓ Producto guardado con ID: " + producto.getIdProducto());
-                        return true;
                     }
                 }
-            }
-            
-            return false;
-            
+                return true;
+            } 
+            return false;           
+            //Si se guarda retorna true sino false.            
         } catch (SQLException e) {
             System.err.println("Error al guardar producto: " + e.getMessage());
             throw e;

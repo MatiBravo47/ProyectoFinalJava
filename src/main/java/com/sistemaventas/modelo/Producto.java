@@ -1,26 +1,46 @@
 package com.sistemaventas.modelo;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.math.BigDecimal;    //valores decimales con precisión y vitar errores de redondeo típicos de double
+import java.math.RoundingMode; //redondear decimales
 
 
 public class Producto {
     
     private int idProducto;
     private String nombre;
-    private BigDecimal precio; // Usamos BigDecimal para mayor precisión con dinero
+    private BigDecimal precio;
     private int stock;
     
+    //Constructor vacio
     public Producto() {
     }
     
-
+    //Constructor sin idProducto
     public Producto(String nombre, BigDecimal precio, int stock) {
         this.nombre = nombre;
         this.precio = precio.setScale(2, RoundingMode.HALF_UP);
         this.stock = stock;
     }
     
+    /*
+    BigDecimal tiene un método llamado setScale(int scale, RoundingMode mode).
+
+        scale → la cantidad de decimales.
+
+        RoundingMode → forma de redondea si hay más decimales de los que pediste.
+    
+    HALF_UP?
+
+    Es un modo de redondeo muy usado en dinero:
+
+    Mira el tercer decimal (el que sobra).
+
+    Si ese decimal es 5 o más, redondea hacia arriba.
+
+    Si es menor a 5, redondea hacia abajo.
+    */
+    
+    //Constructor con idProducto
     public Producto(int idProducto, String nombre, BigDecimal precio, int stock) {
         this.idProducto = idProducto;
         this.nombre = nombre;
@@ -42,6 +62,7 @@ public class Producto {
         return nombre;
     }
     
+    //No permite nombres vacíos o nulos.
     public void setNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del producto no puede estar vacío");
@@ -53,6 +74,7 @@ public class Producto {
         return precio;
     }
     
+    //El precio debe ser mayor a 0.
     public void setPrecio(BigDecimal precio) {
         if (precio == null || precio.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El precio debe ser mayor a cero");

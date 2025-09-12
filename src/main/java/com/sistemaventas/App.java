@@ -12,7 +12,6 @@ public class App {
     
     public static void main(String[] args) {
         System.out.println("=== SISTEMA DE VENTAS DE SANITARIOS ===");
-        System.out.println("Versión: 1.0-SNAPSHOT");
         System.out.println("Base de datos: SQLite");
         
         // Probar conexión a SQLite
@@ -44,7 +43,7 @@ public class App {
             // 2. CREAR nuevo producto
             System.out.println("\n2. CREANDO NUEVO PRODUCTO:");
             Producto nuevoProducto = new Producto(
-                "Mampara de Vidrio Premium", 
+                "Mampara de Vidrio Deluxe", 
                 new BigDecimal("45500.00"), 
                 3
             );

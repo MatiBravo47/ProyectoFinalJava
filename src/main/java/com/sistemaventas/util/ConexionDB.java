@@ -1,3 +1,5 @@
+//manejar la conexión a la base de datos SQLite
+
 package com.sistemaventas.util;
 
 import java.sql.Connection;
@@ -22,18 +24,15 @@ public class ConexionDB {
     public static Connection getConexion() throws SQLException {
         if (conexion == null || conexion.isClosed()) {
             try {
-                // Cargar el driver de SQLite
-                Class.forName("org.sqlite.JDBC");
+                Class.forName("org.sqlite.JDBC");//Cargar el driver de SQLite
                 
-                // Establecer conexión
-                conexion = DriverManager.getConnection(DB_URL);
+                conexion = DriverManager.getConnection(DB_URL);//Conectar
                 
                 // Configuraciones recomendadas para SQLite
                 conexion.setAutoCommit(true);
                 
                 System.out.println("✓ Conexión a SQLite establecida: " + DB_NAME);
                 
-                // Crear tablas si no existen
                 crearTablasSiNoExisten();
                 
             } catch (ClassNotFoundException e) {
@@ -46,9 +45,9 @@ public class ConexionDB {
         return conexion;
     }
     
-    /**
-     * Cierra la conexión a la base de datos
-     */
+
+     //Cierra la conexión a la base de datos
+
     public static void cerrarConexion() {
         try {
             if (conexion != null && !conexion.isClosed()) {
@@ -60,9 +59,7 @@ public class ConexionDB {
         }
     }
     
-    /**
-     * Crea las tablas necesarias si no existen
-     */
+    //Crea las tablas necesarias si no existen
     private static void crearTablasSiNoExisten() throws SQLException {
         try (Statement stmt = conexion.createStatement()) {
             
@@ -121,9 +118,7 @@ public class ConexionDB {
         }
     }
     
-    /**
-     * Inserta algunos datos de prueba si las tablas están vacías
-     */
+    //Inserta algunos datos de prueba si las tablas están vacías
     private static void insertarDatosPrueba() throws SQLException {
         try (Statement stmt = conexion.createStatement()) {
             
@@ -161,9 +156,8 @@ public class ConexionDB {
         }
     }
     
-    /**
-     * Método para probar la conexión
-     */
+    //Método para probar la conexión
+   
     public static void probarConexion() {
         try {
             Connection conn = getConexion();
