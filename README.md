@@ -21,7 +21,7 @@ mvn -version
 ### Clonar/Descargar el proyecto
 
 ```bash 
-   git clone [URL-DEL-REPOSITORIO]
+   git clone https://github.com/MatiBravo47/ProyectoFinalJava.git
    cd SistemaVentasSanitarios
 ```   
 ### O descargar y extraer el ZIP
@@ -39,4 +39,5 @@ mvn clean install
 Ejecutar el proyecto
 
 bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
+
 
