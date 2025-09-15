@@ -1,4 +1,15 @@
-C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\util\ConexionDB.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\modelo\Cliente.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\vista\ClienteView.java
 C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\dao\ProductoDAO.java
-C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\App.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\vista\VentaView.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\controlador\ProductoController.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\dao\VentaDAO.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\vista\MainView.java
 C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\modelo\Producto.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\dao\ClienteDAO.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\controlador\VentaController.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\util\ConexionDB.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\vista\ProductoView.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\controlador\ClienteController.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\modelo\Venta.java
+C:\Users\Matt_\OneDrive\Desktop\JAVA\First steps\SistemaVentasSanitarios\src\main\java\com\sistemaventas\App.java

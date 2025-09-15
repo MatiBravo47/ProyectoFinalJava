@@ -69,9 +69,7 @@ public class ConexionDB {
                     id_producto INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre VARCHAR(100) NOT NULL UNIQUE,
                     precio DECIMAL(10,2) NOT NULL CHECK(precio > 0),
-                    stock INTEGER NOT NULL DEFAULT 0 CHECK(stock >= 0),
-                    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    stock INTEGER NOT NULL DEFAULT 0 CHECK(stock >= 0)
                 )
             """;
             
@@ -81,9 +79,7 @@ public class ConexionDB {
                     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre VARCHAR(100) NOT NULL,
                     telefono VARCHAR(20),
-                    email VARCHAR(100) UNIQUE,
-                    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    email VARCHAR(100) UNIQUE
                 )
             """;
             
@@ -97,7 +93,6 @@ public class ConexionDB {
                     cantidad INTEGER NOT NULL CHECK(cantidad > 0),
                     precio_unitario DECIMAL(10,2) NOT NULL,
                     total DECIMAL(10,2) NOT NULL,
-                    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
                     FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
                 )

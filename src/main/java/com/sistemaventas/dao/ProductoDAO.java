@@ -91,7 +91,7 @@ public class ProductoDAO {
     
 
     public boolean actualizar(Producto producto) throws SQLException {
-        String sql = "UPDATE productos SET nombre = ?, precio = ?, stock = ?, fecha_modificacion = CURRENT_TIMESTAMP WHERE id_producto = ?";
+        String sql = "UPDATE productos SET nombre = ?, precio = ?, stock = ? WHERE id_producto = ?";
         
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -174,7 +174,7 @@ public class ProductoDAO {
     
 
     public boolean actualizarStock(int id, int nuevoStock) throws SQLException {
-        String sql = "UPDATE productos SET stock = ?, fecha_modificacion = CURRENT_TIMESTAMP WHERE id_producto = ?";
+        String sql = "UPDATE productos SET stock = ? WHERE id_producto = ?";
         
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

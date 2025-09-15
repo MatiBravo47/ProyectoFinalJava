@@ -1,4 +1,15 @@
+com\sistemaventas\vista\MainView.class
+com\sistemaventas\modelo\Venta.class
+com\sistemaventas\controlador\VentaController.class
+com\sistemaventas\dao\VentaDAO.class
+com\sistemaventas\controlador\ClienteController.class
+com\sistemaventas\controlador\ProductoController.class
+com\sistemaventas\vista\VentaView.class
+com\sistemaventas\vista\ClienteView.class
 com\sistemaventas\dao\ProductoDAO.class
+com\sistemaventas\modelo\Cliente.class
 com\sistemaventas\util\ConexionDB.class
 com\sistemaventas\App.class
+com\sistemaventas\dao\ClienteDAO.class
 com\sistemaventas\modelo\Producto.class
+com\sistemaventas\vista\ProductoView.class
