@@ -1,4 +1,12 @@
-﻿# ProyectoFinalJava
+﻿# Proyecto Final Java - Sistema de Gestión de Ventas
+## Tecnologias utilizadas
+- Java
+- JDBC (Java Database Connectivity) para conexión con la base de datos
+- SQLite como base de datos local
+- Swing para la interfaz gráfica
+- Maven para gestión de dependencias
+- Patrón de diseño: MVC (Modelo-Vista-Controlador), DAO (Data Access Object)
+
 
 ## Instalación y Configuración
 
@@ -39,5 +47,18 @@ Ejecutar el proyecto
 
 bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
 
+
+### Uso
+- CRUD de productos, ventas y clientes.
+- Manejo de stock y registro de ventas.
+- Persistencia de datos mediante SQLite.
+- Conexión a la base de datos realizada con JDBC.
+
+### Estructura proyecto 
+- modelo: Clases de las entidades (Producto, Cliente, Venta)
+- dao: Clases de acceso a la base de datos
+- vista: Interfaces gráficas Swing
+- controlador: Lógica de control y coordinación MVC
+- util: Utilidades como conexión a base de datos (Singleton)
 
 
