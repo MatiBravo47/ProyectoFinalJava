@@ -35,17 +35,6 @@ java -version
 
 NetBeans: File → Open Project → Seleccionar carpeta
 
-Instalar dependencias
-
-```bash
-mvn clean install
-```
-
-Ejecutar el proyecto
-
-bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
-
-
 ### Uso
 - CRUD de productos, ventas y clientes.
 - Manejo de stock y registro de ventas.
@@ -58,6 +47,7 @@ bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
 - vista: Interfaces gráficas Swing
 - controlador: Lógica de control y coordinación MVC
 - util: Utilidades como conexión a base de datos (Singleton)
+
 
 
 
