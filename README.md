@@ -15,9 +15,9 @@ Asegúrate de tener instalado:
 
 - ☕ Java 17 o superior
 - 📦 Apache Maven 3.6+
-- 💻 IDE (NetBeans, IntelliJ IDEA, VS Code, etc.)
+- 💻 IDE NetBeans, IntelliJ IDEA, VS Code, etc.)
 
-### Verificar instalación
+## Verificar instalación
 ### bash Verificar Java
 ```bash 
 java -version
@@ -60,5 +60,6 @@ bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
 - vista: Interfaces gráficas Swing
 - controlador: Lógica de control y coordinación MVC
 - util: Utilidades como conexión a base de datos (Singleton)
+
 
 
