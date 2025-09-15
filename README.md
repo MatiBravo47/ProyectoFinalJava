@@ -5,9 +5,9 @@
 ## Prerrequisitos
 Asegúrate de tener instalado:
 
-☕ Java 17 o superior
-📦 Apache Maven 3.6+
-💻 IDE (NetBeans, IntelliJ IDEA, VS Code, etc.)
+- ☕ Java 17 o superior
+- 📦 Apache Maven 3.6+
+- 💻 IDE (NetBeans, IntelliJ IDEA, VS Code, etc.)
 
 ### Verificar instalación
 ### bash Verificar Java
@@ -24,9 +24,8 @@ mvn -version
    git clone https://github.com/MatiBravo47/ProyectoFinalJava.git
    cd SistemaVentasSanitarios
 ```   
-### O descargar y extraer el ZIP
 
-Abrir en tu IDE favorito
+### O descargar y extraer el ZIP
 
 NetBeans: File → Open Project → Seleccionar carpeta
 
@@ -39,5 +38,6 @@ mvn clean install
 Ejecutar el proyecto
 
 bash   mvn exec:java -Dexec.mainClass="com.sistemaventas.App"
+
 
 
