@@ -63,9 +63,11 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.sistemaventas.App</mainClass>
+                    <mainClass>com.sistemaventas.launcher.App</mainClass>
                 </configuration>
             </plugin>
+
+
             
             <!-- Plugin para crear JAR ejecutable -->
             <plugin>
