@@ -5,8 +5,8 @@ import javax.swing.table.AbstractTableModel;
 public class ProductoTableModel extends AbstractTableModel {
     private String[] columns = {"ID", "Nombre", "Precio", "Stock"};
     private Object[][] data = {
-            {"1", "Camiseta", "1200.00", "10"},
-            {"2", "Short", "800.00", "5"}
+            {"1", "Inodoro Ferrum Andina", "1200.00", "10"},
+            {"2", "Lavatorio Ferrum Bari", "800.00", "5"}
     };
 
     @Override

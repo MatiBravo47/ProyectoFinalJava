@@ -8,23 +8,30 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
-
 public class App {
     
     public static void main(String[] args) {
         System.out.println("=== SISTEMA DE VENTAS DE SANITARIOS ===");
         System.out.println("Base de datos: SQLite");
         
+        // Mostrar información de ubicación de la BD
+        ConexionDB.mostrarInformacionBaseDatos();
+        
         // Probar conexión a SQLite
         ConexionDB.probarConexion();
+        
+        // Verificar estado actual de la base de datos
+        ConexionDB.verificarBaseDatos();
         
         // Pruebas CRUD con base de datos
         pruebasCRUD();
         
-        MainView.main(args); // o new MainView().setVisible(true);
+        // Verificar nuevamente después de las pruebas
+        System.out.println("\n=== DESPUÉS DE PRUEBAS CRUD ===");
+        ConexionDB.verificarBaseDatos();
         
-        // Cerrar conexión al finalizar
-        ConexionDB.cerrarConexion();
+        // Iniciar la interfaz gráfica
+        MainView.main(args);
         
         System.out.println("\n🚀 ¡Sistema funcionando correctamente con SQLite!");
     }

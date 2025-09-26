@@ -1,13 +1,242 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.sistemaventas.dao;
 
+import com.sistemaventas.modelo.Cliente;
+import com.sistemaventas.util.ConexionDB;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
+ * DAO para manejo de operaciones CRUD de Cliente
  * @author Matt_
  */
 public class ClienteDAO {
     
+    public boolean guardar(Cliente cliente) throws SQLException {
+        String sql = "INSERT INTO clientes (nombre, telefono, email) VALUES (?, ?, ?)";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            // Deshabilitar auto-commit para manejar la transacción manualmente
+            conn.setAutoCommit(false);
+            
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getTelefono());
+            pstmt.setString(3, cliente.getEmail());
+            
+            int filasAfectadas = pstmt.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                // Obtener el ID generado
+                String sqlId = "SELECT last_insert_rowid() as id";
+                try (PreparedStatement pstmtId = conn.prepareStatement(sqlId);
+                     ResultSet rs = pstmtId.executeQuery()) {
+                    
+                    if (rs.next()) {
+                        cliente.setIdCliente(rs.getInt("id"));
+                        
+                        // Confirmar la transacción
+                        conn.commit();
+                        
+                        System.out.println("✓ Cliente guardado con ID: " + cliente.getIdCliente());
+                        
+                        // Verificar que se guardó correctamente
+                        verificarGuardado(cliente.getIdCliente());
+                        
+                        return true;
+                    }
+                }
+            }
+            
+            // Si llegamos aquí, algo salió mal
+            conn.rollback();
+            return false;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al guardar cliente: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public Cliente buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM clientes WHERE id_cliente = ?";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapearCliente(rs);
+                }
+            }
+            
+            return null;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al buscar cliente por ID: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public List<Cliente> obtenerTodos() throws SQLException {
+        String sql = "SELECT * FROM clientes ORDER BY nombre";
+        List<Cliente> clientes = new ArrayList<>();
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                clientes.add(mapearCliente(rs));
+            }
+            
+            System.out.println("✓ Clientes obtenidos: " + clientes.size());
+            return clientes;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al obtener clientes: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public boolean actualizar(Cliente cliente) throws SQLException {
+        String sql = "UPDATE clientes SET nombre = ?, telefono = ?, email = ? WHERE id_cliente = ?";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            conn.setAutoCommit(false);
+            
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getTelefono());
+            pstmt.setString(3, cliente.getEmail());
+            pstmt.setInt(4, cliente.getIdCliente());
+            
+            int filasAfectadas = pstmt.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                conn.commit();
+                System.out.println("✓ Cliente actualizado: " + cliente.getNombre());
+                return true;
+            } else {
+                conn.rollback();
+            }
+            
+            return false;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar cliente: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public boolean eliminar(int id) throws SQLException {
+        // Primero verificar si el cliente existe
+        Cliente cliente = buscarPorId(id);
+        if (cliente == null) {
+            System.out.println("⚠ Cliente con ID " + id + " no encontrado");
+            return false;
+        }
+        
+        String sql = "DELETE FROM clientes WHERE id_cliente = ?";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            conn.setAutoCommit(false);
+            
+            pstmt.setInt(1, id);
+            
+            int filasAfectadas = pstmt.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                conn.commit();
+                System.out.println("✓ Cliente eliminado: " + cliente.getNombre());
+                return true;
+            } else {
+                conn.rollback();
+            }
+            
+            return false;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar cliente: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public List<Cliente> buscarPorNombre(String nombre) throws SQLException {
+        String sql = "SELECT * FROM clientes WHERE nombre LIKE ? ORDER BY nombre";
+        List<Cliente> clientes = new ArrayList<>();
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, "%" + nombre + "%");
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    clientes.add(mapearCliente(rs));
+                }
+            }
+            
+            System.out.println("✓ Clientes encontrados: " + clientes.size());
+            return clientes;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al buscar clientes por nombre: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    public Cliente buscarPorEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM clientes WHERE email = ?";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, email);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapearCliente(rs);
+                }
+            }
+            
+            return null;
+            
+        } catch (SQLException e) {
+            System.err.println("Error al buscar cliente por email: " + e.getMessage());
+            throw e;
+        }
+    }
+    
+    /**
+     * Verifica que el cliente se guardó correctamente
+     */
+    private void verificarGuardado(int idCliente) {
+        try {
+            Cliente verificacion = buscarPorId(idCliente);
+            if (verificacion != null) {
+                System.out.println("✅ Verificación exitosa: Cliente encontrado en BD: " + verificacion.getNombre());
+            } else {
+                System.out.println("❌ Error: Cliente no encontrado después de guardar");
+            }
+        } catch (SQLException e) {
+            System.out.println("⚠ No se pudo verificar el guardado: " + e.getMessage());
+        }
+    }
+    
+    private Cliente mapearCliente(ResultSet rs) throws SQLException {
+        return new Cliente(
+            rs.getInt("id_cliente"),
+            rs.getString("nombre"),
+            rs.getString("telefono"),
+            rs.getString("email")
+        );
+    }
 }
