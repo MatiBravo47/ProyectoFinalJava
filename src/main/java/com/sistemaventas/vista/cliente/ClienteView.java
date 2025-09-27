@@ -2,6 +2,7 @@ package com.sistemaventas.vista.cliente;
 
 import com.sistemaventas.modelo.Cliente;
 import com.sistemaventas.vista.tables.ClienteTableModel;
+//import com.sistemaventas.vista.MainView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,7 +94,6 @@ public class ClienteView extends JFrame {
         
         // Panel inferior - Botones de acción
         JPanel panelBotones = new JPanel(new FlowLayout());
-        //panelBotones.setBorder(BorderFactory.createTitledBorder("Acciones"));
         
         JButton btnNuevo = new JButton("Nuevo Cliente");
         JButton btnEditar = new JButton("Editar");
@@ -332,7 +332,6 @@ public class ClienteView extends JFrame {
     public void actualizarLista() {
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            System.out.println("?Actualizando lista de clientes...");
             
             tableModel.cargarDatos();
             

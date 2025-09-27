@@ -38,19 +38,13 @@ public class ClienteDAO {
                         cliente.setIdCliente(rs.getInt("id"));
                         
                         // Confirmar la transacción
-                        conn.commit();
-                        
-                        System.out.println("✓ Cliente guardado con ID: " + cliente.getIdCliente());
-                        
-                        // Verificar que se guardó correctamente
-                        verificarGuardado(cliente.getIdCliente());
+                        conn.commit();                                           
                         
                         return true;
                     }
                 }
             }
             
-            // Si llegamos aquí, algo salió mal
             conn.rollback();
             return false;
             
@@ -92,9 +86,7 @@ public class ClienteDAO {
             
             while (rs.next()) {
                 clientes.add(mapearCliente(rs));
-            }
-            
-            System.out.println("✓ Clientes obtenidos: " + clientes.size());
+            }          
             return clientes;
             
         } catch (SQLException e) {
@@ -120,7 +112,6 @@ public class ClienteDAO {
             
             if (filasAfectadas > 0) {
                 conn.commit();
-                System.out.println("✓ Cliente actualizado: " + cliente.getNombre());
                 return true;
             } else {
                 conn.rollback();
@@ -129,7 +120,6 @@ public class ClienteDAO {
             return false;
             
         } catch (SQLException e) {
-            System.err.println("Error al actualizar cliente: " + e.getMessage());
             throw e;
         }
     }
@@ -138,7 +128,7 @@ public class ClienteDAO {
         // Primero verificar si el cliente existe
         Cliente cliente = buscarPorId(id);
         if (cliente == null) {
-            System.out.println("⚠ Cliente con ID " + id + " no encontrado");
+            System.out.println("Cliente con ID " + id + " no encontrado");
             return false;
         }
         
@@ -155,7 +145,7 @@ public class ClienteDAO {
             
             if (filasAfectadas > 0) {
                 conn.commit();
-                System.out.println("✓ Cliente eliminado: " + cliente.getNombre());
+                System.out.println("Cliente eliminado: " + cliente.getNombre());
                 return true;
             } else {
                 conn.rollback();
@@ -184,7 +174,7 @@ public class ClienteDAO {
                 }
             }
             
-            System.out.println("✓ Clientes encontrados: " + clientes.size());
+            System.out.println("Clientes encontrados: " + clientes.size());
             return clientes;
             
         } catch (SQLException e) {
@@ -212,22 +202,6 @@ public class ClienteDAO {
         } catch (SQLException e) {
             System.err.println("Error al buscar cliente por email: " + e.getMessage());
             throw e;
-        }
-    }
-    
-    /**
-     * Verifica que el cliente se guardó correctamente
-     */
-    private void verificarGuardado(int idCliente) {
-        try {
-            Cliente verificacion = buscarPorId(idCliente);
-            if (verificacion != null) {
-                System.out.println("✅ Verificación exitosa: Cliente encontrado en BD: " + verificacion.getNombre());
-            } else {
-                System.out.println("❌ Error: Cliente no encontrado después de guardar");
-            }
-        } catch (SQLException e) {
-            System.out.println("⚠ No se pudo verificar el guardado: " + e.getMessage());
         }
     }
     

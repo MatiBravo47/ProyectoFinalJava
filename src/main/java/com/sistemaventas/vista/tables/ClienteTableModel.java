@@ -15,7 +15,6 @@ public class ClienteTableModel extends AbstractTableModel {
     private ClienteDAO clienteDAO = new ClienteDAO();
     
     public ClienteTableModel() {
-        // No cargar datos automáticamente en el constructor
     }
     
     /**
@@ -23,7 +22,6 @@ public class ClienteTableModel extends AbstractTableModel {
      */
     public void cargarDatos() {
         try {
-            System.out.println("Cargando clientes desde la base de datos...");
             List<Cliente> nuevosClientes = clienteDAO.obtenerTodos();
             
             // Limpiar la lista actual
@@ -35,7 +33,6 @@ public class ClienteTableModel extends AbstractTableModel {
             // Notificar que los datos cambiaron
             fireTableDataChanged();
             
-            System.out.println("Datos cargados: " + clientes.size() + " clientes");
             
         } catch (SQLException e) {
             System.err.println("Error al cargar clientes: " + e.getMessage());
@@ -55,7 +52,6 @@ public class ClienteTableModel extends AbstractTableModel {
      */
     public void buscarPorNombre(String nombre) {
         try {
-            System.out.println("Buscando clientes por nombre: " + nombre);
             
             List<Cliente> clientesEncontrados;
             
@@ -74,7 +70,6 @@ public class ClienteTableModel extends AbstractTableModel {
             // Notificar que los datos cambiaron
             fireTableDataChanged();
             
-            System.out.println("Búsqueda completada: " + clientes.size() + " clientes encontrados");
             
         } catch (SQLException e) {
             System.err.println("Error al buscar clientes: " + e.getMessage());

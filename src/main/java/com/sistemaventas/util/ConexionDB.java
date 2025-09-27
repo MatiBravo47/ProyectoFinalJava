@@ -52,8 +52,6 @@ public class ConexionDB {
                 stmt.execute("PRAGMA temp_store = MEMORY");        // Tablas temporales en memoria
             }
             
-            System.out.println("Nueva conexión SQLite establecida");
-            System.out.println("Archivo de BD: " + DB_PATH);
             
             // Crear tablas si es la primera conexión
             crearTablasSiNoExisten(conn);
@@ -196,17 +194,8 @@ public class ConexionDB {
                     ('Ducha Hansgrohe Basic', 12300.75, 15),
                     ('Bidet Roca Meridian', 22450.00, 6);
                 """;
-                
-                // Insertar clientes de prueba
-                String insertClientes = """
-                    INSERT INTO clientes (nombre, telefono, email) VALUES 
-                    ('Juan Pérez', '011-4567-8901', 'juan.perez@email.com'),
-                    ('María García', '011-2345-6789', 'maria.garcia@email.com'),
-                    ('Carlos López', '011-8765-4321', 'carlos.lopez@email.com');
-                """;
-                
+                               
                 stmt.execute(insertProductos);
-                stmt.execute(insertClientes);
                 
                 // Confirmar explícitamente
                 conn.commit();
@@ -217,98 +206,6 @@ public class ConexionDB {
         } catch (SQLException e) {
             // No es crítico si falla la inserción de datos de prueba
             System.out.println("Advertencia: No se pudieron insertar datos de prueba: " + e.getMessage());
-        }
-    }
-    
-    /**
-     * Método para probar la conexión y mostrar información de la BD
-     */
-    public static void probarConexion() {
-        mostrarInformacionBaseDatos();
-        
-        try (Connection conn = getConexion();
-             Statement stmt = conn.createStatement()) {
-            
-            System.out.println(" Prueba de conexión exitosa");
-            
-            // Mostrar información de las tablas
-            var rsProductos = stmt.executeQuery("SELECT COUNT(*) as total FROM productos");
-            if (rsProductos.next()) {
-                System.out.println("Productos en BD: " + rsProductos.getInt("total"));
-            }
-            
-            var rsClientes = stmt.executeQuery("SELECT COUNT(*) as total FROM clientes");
-            if (rsClientes.next()) {
-                System.out.println("Clientes en BD: " + rsClientes.getInt("total"));
-            }
-            
-            // Mostrar últimos clientes agregados
-            var rsUltimos = stmt.executeQuery(
-                "SELECT id_cliente, nombre FROM clientes ORDER BY id_cliente DESC LIMIT 3"
-            );
-            System.out.println(" Últimos clientes:");
-            while (rsUltimos.next()) {
-                System.out.println("  - ID: " + rsUltimos.getInt("id_cliente") + 
-                                 ", Nombre: " + rsUltimos.getString("nombre"));
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Error en prueba de conexión: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Muestra información detallada sobre la ubicación de la base de datos
-     */
-    public static void mostrarInformacionBaseDatos() {
-        System.out.println("\n=== INFORMACIÓN DE BASE DE DATOS ===");
-        System.out.println("Directorio de la BD: " + DB_DIRECTORY);
-        System.out.println("Archivo de BD: " + DB_NAME);
-        
-        File dbFile = new File(DB_PATH);
-        if (dbFile.exists()) {
-            System.out.println("Creado: " + new java.util.Date(dbFile.lastModified()));
-        }
-    }
-    
-    /**
-     * Método para verificar manualmente los datos en la base
-     */
-    public static void verificarBaseDatos() {
-        System.out.println("\n=== VERIFICACIÓN DE BASE DE DATOS ===");
-        System.out.println("Ubicación: " + DB_PATH);
-        
-        try (Connection conn = getConexion();
-             Statement stmt = conn.createStatement()) {
-            
-            // Verificar productos
-            System.out.println("\n PRODUCTOS:");
-            var rsProductos = stmt.executeQuery("SELECT * FROM productos ORDER BY id_producto");
-            while (rsProductos.next()) {
-                System.out.printf("  ID: %d | %s | $%.2f | Stock: %d%n",
-                    rsProductos.getInt("id_producto"),
-                    rsProductos.getString("nombre"),
-                    rsProductos.getDouble("precio"),
-                    rsProductos.getInt("stock")
-                );
-            }
-            
-            // Verificar clientes
-            System.out.println("\nCLIENTES:");
-            var rsClientes = stmt.executeQuery("SELECT * FROM clientes ORDER BY id_cliente");
-            while (rsClientes.next()) {
-                System.out.printf("  ID: %d | %s | Tel: %s | Email: %s%n",
-                    rsClientes.getInt("id_cliente"),
-                    rsClientes.getString("nombre"),
-                    rsClientes.getString("telefono"),
-                    rsClientes.getString("email")
-                );
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Error al verificar base de datos: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
