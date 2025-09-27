@@ -35,10 +35,7 @@ public class ClienteTableModel extends AbstractTableModel {
             // Notificar que los datos cambiaron
             fireTableDataChanged();
             
-            System.out.println("Datos cargados: " + clientes.size() + " clientes");
-            
         } catch (SQLException e) {
-            System.err.println("Error al cargar clientes: " + e.getMessage());
             e.printStackTrace();
             
             // En caso de error, mantener una lista vacía
@@ -55,8 +52,6 @@ public class ClienteTableModel extends AbstractTableModel {
      */
     public void buscarPorNombre(String nombre) {
         try {
-            System.out.println("Buscando clientes por nombre: " + nombre);
-            
             List<Cliente> clientesEncontrados;
             
             if (nombre == null || nombre.trim().isEmpty()) {
@@ -74,10 +69,7 @@ public class ClienteTableModel extends AbstractTableModel {
             // Notificar que los datos cambiaron
             fireTableDataChanged();
             
-            System.out.println("Búsqueda completada: " + clientes.size() + " clientes encontrados");
-            
         } catch (SQLException e) {
-            System.err.println("Error al buscar clientes: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Error en la búsqueda: " + e.getMessage(), e);
         }
@@ -153,15 +145,12 @@ public class ClienteTableModel extends AbstractTableModel {
             if (guardado) {
                 // Recargar todos los datos para asegurar consistencia
                 cargarDatos();
-                System.out.println("Cliente agregado y tabla actualizada");
                 return true;
             } else {
-                System.out.println("No se pudo guardar el cliente");
                 return false;
             }
             
         } catch (SQLException e) {
-            System.err.println("Error al agregar cliente: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("No se pudo agregar el cliente: " + e.getMessage(), e);
         }
@@ -172,22 +161,17 @@ public class ClienteTableModel extends AbstractTableModel {
      */
     public boolean actualizarCliente(Cliente cliente) {
         try {
-            System.out.println(" Actualizando cliente ID: " + cliente.getIdCliente());
-            
             boolean actualizado = clienteDAO.actualizar(cliente);
             
             if (actualizado) {
                 // Recargar todos los datos para asegurar consistencia
                 cargarDatos();
-                System.out.println("Cliente actualizado y tabla refrescada");
                 return true;
             } else {
-                System.out.println("No se pudo actualizar el cliente");
                 return false;
             }
             
         } catch (SQLException e) {
-            System.err.println("Error al actualizar cliente: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("No se pudo actualizar el cliente: " + e.getMessage(), e);
         }
@@ -201,51 +185,22 @@ public class ClienteTableModel extends AbstractTableModel {
             Cliente cliente = clientes.get(row);
             
             try {
-                System.out.println("Eliminando cliente: " + cliente.getNombre());
-                
                 boolean eliminado = clienteDAO.eliminar(cliente.getIdCliente());
                 
                 if (eliminado) {
                     // Recargar todos los datos para asegurar consistencia
                     cargarDatos();
-                    System.out.println("Cliente eliminado y tabla actualizada");
                     return true;
                 } else {
-                    System.out.println("No se pudo eliminar el cliente");
                     return false;
                 }
                 
             } catch (SQLException e) {
-                System.err.println("Error al eliminar cliente: " + e.getMessage());
                 e.printStackTrace();
                 throw new RuntimeException("No se pudo eliminar el cliente: " + e.getMessage(), e);
             }
         }
         
         return false;
-    }
-    
-    /**
-     * Obtiene estadísticas de los datos actuales en la tabla
-     */
-    public String getEstadisticas() {
-        if (clientes.isEmpty()) {
-            return "No hay clientes registrados";
-        }
-        
-        int totalClientes = clientes.size();
-        long conEmail = clientes.stream()
-            .filter(c -> c.getEmail() != null && !c.getEmail().trim().isEmpty())
-            .count();
-        long conTelefono = clientes.stream()
-            .filter(c -> c.getTelefono() != null && !c.getTelefono().trim().isEmpty())
-            .count();
-        
-        return String.format(
-            "Total: %d clientes | Con email: %d (%.1f%%) | Con teléfono: %d (%.1f%%)",
-            totalClientes,
-            conEmail, (conEmail * 100.0 / totalClientes),
-            conTelefono, (conTelefono * 100.0 / totalClientes)
-        );
     }
 }

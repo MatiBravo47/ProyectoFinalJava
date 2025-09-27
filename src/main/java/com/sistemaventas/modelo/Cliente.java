@@ -2,6 +2,11 @@ package com.sistemaventas.modelo;
 
 import java.util.Objects;
 
+/**
+ * Clase modelo que representa un Cliente
+ * Contiene toda la información de un cliente del sistema
+ */
+
 public class Cliente {
     
     public int idCliente;
