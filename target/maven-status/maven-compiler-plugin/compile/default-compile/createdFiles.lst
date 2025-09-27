@@ -10,12 +10,15 @@ com\sistemaventas\vista\tables\ProductoTableModel.class
 com\sistemaventas\controlador\ClienteController.class
 com\sistemaventas\vista\cliente\ClienteForm.class
 com\sistemaventas\controlador\ProductoController.class
+com\sistemaventas\vista\cliente\ClienteView$1.class
 com\sistemaventas\vista\venta\VentaForm.class
 com\sistemaventas\vista\tables\ClienteTableModel.class
 com\sistemaventas\vista\producto\ProductoForm.class
 com\sistemaventas\dao\ProductoDAO.class
+com\sistemaventas\vista\cliente\ClienteView$2.class
 com\sistemaventas\modelo\Cliente.class
 com\sistemaventas\vista\cliente\ClienteView.class
 com\sistemaventas\util\ConexionDB.class
+com\sistemaventas\vista\cliente\ClienteForm$1.class
 com\sistemaventas\dao\ClienteDAO.class
 com\sistemaventas\modelo\Producto.class
