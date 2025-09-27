@@ -31,7 +31,6 @@ public class ProductoDAO {
                     
                     if (rs.next()) {
                         producto.setIdProducto(rs.getInt("id"));
-                        System.out.println("✓ Producto guardado con ID: " + producto.getIdProducto());
                     }
                 }
                 return true;
@@ -39,7 +38,6 @@ public class ProductoDAO {
             return false;           
             //Si se guarda retorna true sino false.            
         } catch (SQLException e) {
-            System.err.println("Error al guardar producto: " + e.getMessage());
             throw e;
         }
     }
@@ -62,7 +60,6 @@ public class ProductoDAO {
             return null;
             
         } catch (SQLException e) {
-            System.err.println("Error al buscar producto por ID: " + e.getMessage());
             throw e;
         }
     }
@@ -80,11 +77,9 @@ public class ProductoDAO {
                 productos.add(mapearProducto(rs));
             }
             
-            System.out.println("✓ Productos obtenidos: " + productos.size());
             return productos;
             
         } catch (SQLException e) {
-            System.err.println("Error al obtener productos: " + e.getMessage());
             throw e;
         }
     }
@@ -104,14 +99,12 @@ public class ProductoDAO {
             int filasAfectadas = pstmt.executeUpdate();
             
             if (filasAfectadas > 0) {
-                System.out.println("✓ Producto actualizado: " + producto.getNombre());
                 return true;
             }
             
             return false;
             
         } catch (SQLException e) {
-            System.err.println("Error al actualizar producto: " + e.getMessage());
             throw e;
         }
     }
@@ -121,7 +114,6 @@ public class ProductoDAO {
         // Primero verificar si el producto existe
         Producto producto = buscarPorId(id);
         if (producto == null) {
-            System.out.println("⚠ Producto con ID " + id + " no encontrado");
             return false;
         }
         
@@ -135,14 +127,12 @@ public class ProductoDAO {
             int filasAfectadas = pstmt.executeUpdate();
             
             if (filasAfectadas > 0) {
-                System.out.println("✓ Producto eliminado: " + producto.getNombre());
                 return true;
             }
             
             return false;
             
         } catch (SQLException e) {
-            System.err.println("Error al eliminar producto: " + e.getMessage());
             throw e;
         }
     }
@@ -162,12 +152,9 @@ public class ProductoDAO {
                     productos.add(mapearProducto(rs));
                 }
             }
-            
-            System.out.println("✓ Productos encontrados: " + productos.size());
             return productos;
             
         } catch (SQLException e) {
-            System.err.println("Error al buscar productos por nombre: " + e.getMessage());
             throw e;
         }
     }
@@ -185,14 +172,12 @@ public class ProductoDAO {
             int filasAfectadas = pstmt.executeUpdate();
             
             if (filasAfectadas > 0) {
-                System.out.println("✓ Stock actualizado para producto ID " + id + ": " + nuevoStock);
                 return true;
             }
             
             return false;
             
         } catch (SQLException e) {
-            System.err.println("Error al actualizar stock: " + e.getMessage());
             throw e;
         }
     }

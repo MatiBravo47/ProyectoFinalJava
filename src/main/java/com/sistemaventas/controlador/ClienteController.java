@@ -211,35 +211,4 @@ public class ClienteController {
         
         return true;
     }
-    
-    /**
-     * Obtiene estadísticas básicas de clientes
-     * @return String con información estadística
-     */
-    public String obtenerEstadisticas() {
-        try {
-            List<Cliente> clientes = clienteDAO.obtenerTodos();
-            int total = clientes.size();
-            
-            long conEmail = clientes.stream()
-                .filter(c -> c.getEmail() != null && !c.getEmail().trim().isEmpty())
-                .count();
-                
-            long conTelefono = clientes.stream()
-                .filter(c -> c.getTelefono() != null && !c.getTelefono().trim().isEmpty())
-                .count();
-            
-            return String.format(
-                "Total de clientes: %d\n" +
-                "Con email: %d (%.1f%%)\n" +
-                "Con teléfono: %d (%.1f%%)",
-                total,
-                conEmail, total > 0 ? (conEmail * 100.0 / total) : 0,
-                conTelefono, total > 0 ? (conTelefono * 100.0 / total) : 0
-            );
-            
-        } catch (SQLException e) {
-            return "Error al obtener estadísticas: " + e.getMessage();
-        }
-    }
 }
