@@ -93,12 +93,12 @@ public class ClienteView extends JFrame {
         
         // Panel inferior - Botones de acción
         JPanel panelBotones = new JPanel(new FlowLayout());
-        //panelBotones.setBorder(BorderFactory.createTitledBorder("Acciones"));
         
         JButton btnNuevo = new JButton("Nuevo Cliente");
         JButton btnEditar = new JButton("Editar");
         JButton btnEliminar = new JButton("Eliminar");
         JButton btnVer = new JButton("Ver Detalles");
+        JButton btnVolver = new JButton("← Volver al Menú");
         
         // Colores para los botones
         btnNuevo.setBackground(new Color(46, 125, 50));
@@ -113,23 +113,29 @@ public class ClienteView extends JFrame {
         btnVer.setBackground(new Color(117, 117, 117));
         btnVer.setForeground(Color.WHITE);
         
+        btnVolver.setBackground(new Color(96, 96, 96));
+        btnVolver.setForeground(Color.WHITE);
+        
         // Tamaños uniformes
         Dimension buttonSize = new Dimension(140, 35);
         btnNuevo.setPreferredSize(buttonSize);
         btnEditar.setPreferredSize(buttonSize);
         btnEliminar.setPreferredSize(buttonSize);
         btnVer.setPreferredSize(buttonSize);
+        btnVolver.setPreferredSize(buttonSize);
         
         panelBotones.add(btnNuevo);
         panelBotones.add(btnEditar);
         panelBotones.add(btnEliminar);
         panelBotones.add(btnVer);
+        panelBotones.add(btnVolver);
         
         // Eventos de botones
         btnNuevo.addActionListener(e -> nuevoCliente());
         btnEditar.addActionListener(e -> editarCliente());
         btnEliminar.addActionListener(e -> eliminarCliente());
         btnVer.addActionListener(e -> verDetallesCliente());
+        btnVolver.addActionListener(e -> dispose());
         
         // Agregar paneles al frame
         add(panelSuperior, BorderLayout.NORTH);
@@ -332,7 +338,7 @@ public class ClienteView extends JFrame {
     public void actualizarLista() {
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            System.out.println("?Actualizando lista de clientes...");
+            System.out.println("Actualizando lista de clientes...");
             
             tableModel.cargarDatos();
             
