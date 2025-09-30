@@ -11,7 +11,7 @@ public class MainView extends JFrame {
     public MainView() {
         setTitle("Sistema de Ventas - Menú Principal");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(500, 300);
         setLocationRelativeTo(null);
 
         JPanel p = new JPanel(new GridLayout(3,1,10,10));

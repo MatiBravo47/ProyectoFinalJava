@@ -1,21 +1,26 @@
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\util\ConexionDB.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\venta\VentaForm.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\venta\VentaView.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\ProductoDAO.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Venta.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\VentaTableModel.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\cliente\ClienteForm.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\cliente\ClienteView.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\VentaController.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\launcher\App.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Cliente.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Producto.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\producto\ProductoForm.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\ClienteDAO.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\producto\ProductoView.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\ProductoTableModel.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\MainView.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\ProductoController.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\ClienteController.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\ClienteTableModel.java
-C:\Users\tomas\Desktop\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\VentaDAO.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\ProductoDAO.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\MainView.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\excepciones\SistemaVentasException.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\excepciones\ClienteException.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\ProductoController.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\cliente\ClienteForm.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\venta\VentaView.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\ClienteTableModel.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Producto.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\util\ConexionDB.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\producto\ProductoForm.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\launcher\App.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\ProductoTableModel.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\VentaDAO.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\VentaController.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\dao\ClienteDAO.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\tables\VentaTableModel.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\producto\ProductoView.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\cliente\ClienteView.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\excepciones\VentaException.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\excepciones\ProductoException.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\vista\venta\VentaForm.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Cliente.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\controlador\ClienteController.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\excepciones\ValidacionException.java
+C:\Users\idra9\Desktop\Nueva carpeta\ProyectoFinalJava\src\main\java\com\sistemaventas\modelo\Venta.java
