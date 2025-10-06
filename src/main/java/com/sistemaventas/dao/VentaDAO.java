@@ -9,8 +9,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO para manejo de operaciones CRUD de Venta
- * @author Matt_
+ * Data Access Object (DAO) para la gestión de operaciones CRUD de Venta.
+ * <p>
+ * Esta clase proporciona métodos para realizar operaciones de base de datos
+ * relacionadas con la entidad Venta, incluyendo crear, leer, actualizar
+ * y eliminar registros. Implementa el patrón DAO para separar la lógica
+ * de acceso a datos de la lógica de negocio.
+ * </p>
+ * 
+ * <p><strong>Operaciones soportadas:</strong></p>
+ * <ul>
+ *   <li>Crear nuevas ventas</li>
+ *   <li>Buscar ventas por ID, cliente, producto o fecha</li>
+ *   <li>Obtener todas las ventas</li>
+ *   <li>Actualizar información de ventas existentes</li>
+ *   <li>Eliminar ventas</li>
+ *   <li>Obtener ventas con información de cliente y producto</li>
+ * </ul>
+ * 
+ * <p><strong>Características técnicas:</strong></p>
+ * <ul>
+ *   <li>Utiliza PreparedStatement para prevenir inyección SQL</li>
+ *   <li>Manejo de transacciones con commit/rollback</li>
+ *   <li>Mapeo automático de ResultSet a objetos Venta</li>
+ *   <li>Gestión automática de recursos con try-with-resources</li>
+ *   <li>Manejo de fechas con LocalDate</li>
+ * </ul>
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
+ * @version 1.0
+ * @since 1.0
+ * @see com.sistemaventas.modelo.Venta
+ * @see com.sistemaventas.util.ConexionDB
  */
 public class VentaDAO {
     

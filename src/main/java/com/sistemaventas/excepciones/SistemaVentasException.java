@@ -1,12 +1,34 @@
 package com.sistemaventas.excepcion;
 
 /**
- * Excepción base para el sistema de ventas
- * Todas las excepciones personalizadas del sistema heredan de esta clase
+ * Excepción base para el sistema de ventas de sanitarios.
+ * <p>
+ * Esta clase sirve como base para todas las excepciones personalizadas
+ * del sistema. Proporciona funcionalidad común para el manejo de errores,
+ * incluyendo códigos de error, categorías y mensajes estructurados.
+ * </p>
  * 
- * @author Matt_
+ * <p><strong>Características principales:</strong></p>
+ * <ul>
+ *   <li>Código de error único para identificación</li>
+ *   <li>Categoría para clasificación de errores</li>
+ *   <li>Mensajes técnicos y de usuario</li>
+ *   <li>Información de contexto del error</li>
+ *   <li>Compatibilidad con logging estructurado</li>
+ * </ul>
+ * 
+ * <p><strong>Jerarquía de excepciones:</strong></p>
+ * <ul>
+ *   <li>ClienteException - Errores relacionados con clientes</li>
+ *   <li>ProductoException - Errores relacionados con productos</li>
+ *   <li>VentaException - Errores relacionados con ventas</li>
+ *   <li>ValidacionException - Errores de validación de datos</li>
+ * </ul>
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
  * @version 1.0
- * @since 2025-01-01
+ * @since 1.0
+ * @see java.lang.Exception
  */
 public class SistemaVentasException extends Exception {
     

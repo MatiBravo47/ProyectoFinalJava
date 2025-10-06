@@ -6,6 +6,43 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Utilidad para la gestión de conexiones a la base de datos SQLite.
+ * <p>
+ * Esta clase implementa el patrón Singleton y proporciona métodos para
+ * establecer conexiones con la base de datos SQLite, crear tablas,
+ * insertar datos de prueba y manejar migraciones de esquema.
+ * </p>
+ * 
+ * <p><strong>Características principales:</strong></p>
+ * <ul>
+ *   <li>Patrón Singleton para gestión centralizada</li>
+ *   <li>Conexiones automáticas a SQLite</li>
+ *   <li>Creación automática de tablas</li>
+ *   <li>Migración de esquema de base de datos</li>
+ *   <li>Inserción de datos de prueba</li>
+ *   <li>Gestión de directorios de base de datos</li>
+ * </ul>
+ * 
+ * <p><strong>Ubicación de la base de datos:</strong></p>
+ * <p>
+ * La base de datos se crea en el directorio del usuario:
+ * <code>~/.SistemaVentas/sistemaventas.db</code>
+ * </p>
+ * 
+ * <p><strong>Tablas gestionadas:</strong></p>
+ * <ul>
+ *   <li>clientes - Información de clientes</li>
+ *   <li>productos - Catálogo de productos</li>
+ *   <li>ventas - Registro de transacciones</li>
+ * </ul>
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
+ * @version 1.0
+ * @since 1.0
+ * @see java.sql.Connection
+ * @see java.sql.DriverManager
+ */
 public class ConexionDB {
     
     // Nombre del archivo de base de datos

@@ -7,9 +7,36 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Controlador para manejar la lógica de negocio de Cliente
- * Actúa como intermediario entre la Vista y el DAO
- * @author Matt_
+ * Controlador para manejar la lógica de negocio de Cliente.
+ * <p>
+ * Esta clase actúa como intermediario entre la Vista y el DAO,
+ * implementando el patrón MVC (Modelo-Vista-Controlador). Se encarga
+ * de coordinar las operaciones de negocio relacionadas con clientes,
+ * incluyendo validaciones, transformaciones de datos y manejo de errores.
+ * </p>
+ * 
+ * <p><strong>Responsabilidades:</strong></p>
+ * <ul>
+ *   <li>Validar datos de entrada antes de procesarlos</li>
+ *   <li>Coordinar operaciones entre la vista y el DAO</li>
+ *   <li>Manejar la lógica de negocio específica de clientes</li>
+ *   <li>Transformar datos entre capas de la aplicación</li>
+ *   <li>Gestionar excepciones y errores de negocio</li>
+ * </ul>
+ * 
+ * <p><strong>Operaciones soportadas:</strong></p>
+ * <ul>
+ *   <li>Crear, actualizar y eliminar clientes</li>
+ *   <li>Buscar clientes por diferentes criterios</li>
+ *   <li>Obtener listas de clientes</li>
+ *   <li>Validar integridad de datos</li>
+ * </ul>
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
+ * @version 1.0
+ * @since 1.0
+ * @see com.sistemaventas.modelo.Cliente
+ * @see com.sistemaventas.dao.ClienteDAO
  */
 public class ClienteController {
     
