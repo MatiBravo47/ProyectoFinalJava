@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class ClienteForm extends JDialog {
     
     private JTextField txtNombre;
+    private JTextField txtDni;
     private JTextField txtTelefono;
     private JTextField txtEmail;
     private Cliente clienteEditando;
@@ -31,20 +32,22 @@ public class ClienteForm extends JDialog {
         setupLayout();
         cargarDatos();
         
-        setSize(400, 250);
+        setSize(400, 300);
         setLocationRelativeTo(owner);
         setResizable(false);
     }
     
     private void initComponents() {
         txtNombre = new JTextField(20);
+        txtDni = new JTextField(20);
         txtTelefono = new JTextField(20);
         txtEmail = new JTextField(20);
         
         // Configurar campos
         txtNombre.setToolTipText("Ingrese el nombre completo del cliente");
-        txtTelefono.setToolTipText("Ingrese el teléfono (opcional)");
-        txtEmail.setToolTipText("Ingrese el email (opcional)");
+        txtDni.setToolTipText("Ingrese el DNI (8 dígitos)");
+        txtTelefono.setToolTipText("Ingrese el teléfono (10 dígitos)");
+        txtEmail.setToolTipText("Ingrese el email");
     }
     
     private void setupLayout() {
@@ -67,24 +70,37 @@ public class ClienteForm extends JDialog {
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(txtNombre, gbc);
         
-        // Teléfono
+        // DNI (obligatorio)
         gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE;
-        formPanel.add(new JLabel("Teléfono:"), gbc);
+        JLabel lblDni = new JLabel("DNI *:");
+        lblDni.setFont(lblDni.getFont().deriveFont(Font.BOLD));
+        formPanel.add(lblDni, gbc);
+        
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(txtDni, gbc);
+        
+        // Teléfono (obligatorio)
+        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE;
+        JLabel lblTelefono = new JLabel("Teléfono *:");
+        lblTelefono.setFont(lblTelefono.getFont().deriveFont(Font.BOLD));
+        formPanel.add(lblTelefono, gbc);
         
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(txtTelefono, gbc);
         
-        // Email
-        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE;
-        formPanel.add(new JLabel("Email:"), gbc);
+        // Email (obligatorio)
+        gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE;
+        JLabel lblEmail = new JLabel("Email *:");
+        lblEmail.setFont(lblEmail.getFont().deriveFont(Font.BOLD));
+        formPanel.add(lblEmail, gbc);
         
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(txtEmail, gbc);
         
         // Nota de campos obligatorios
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
-        JLabel lblNota = new JLabel("* Campos obligatorios");
+        JLabel lblNota = new JLabel("* Todos los campos son obligatorios");
         lblNota.setFont(lblNota.getFont().deriveFont(Font.ITALIC, 10f));
         lblNota.setForeground(Color.GRAY);
         formPanel.add(lblNota, gbc);
@@ -124,6 +140,7 @@ public class ClienteForm extends JDialog {
     private void cargarDatos() {
         if (clienteEditando != null) {
             txtNombre.setText(clienteEditando.getNombre());
+            txtDni.setText(clienteEditando.getDni());
             txtTelefono.setText(clienteEditando.getTelefono());
             txtEmail.setText(clienteEditando.getEmail());
         }
@@ -144,9 +161,58 @@ public class ClienteForm extends JDialog {
                 return;
             }
             
-            // Validar email si se ingresó
+            String dni = txtDni.getText().trim();
+            if (dni.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "El DNI es obligatorio", 
+                    "Campo requerido", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtDni.requestFocus();
+                return;
+            }
+            
+            // Validar DNI: debe tener exactamente 8 dígitos
+            if (!dni.matches("\\d{8}")) {
+                JOptionPane.showMessageDialog(this, 
+                    "El DNI debe tener exactamente 8 dígitos numéricos", 
+                    "DNI inválido", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtDni.requestFocus();
+                return;
+            }
+            
+            String telefono = txtTelefono.getText().trim();
+            if (telefono.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "El teléfono es obligatorio", 
+                    "Campo requerido", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtTelefono.requestFocus();
+                return;
+            }
+            
+            // Validar teléfono: debe tener exactamente 10 dígitos
+            if (!telefono.matches("\\d{10}")) {
+                JOptionPane.showMessageDialog(this, 
+                    "El teléfono debe tener exactamente 10 dígitos numéricos", 
+                    "Teléfono inválido", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtTelefono.requestFocus();
+                return;
+            }
+            
             String email = txtEmail.getText().trim();
-            if (!email.isEmpty() && (!email.contains("@") || !email.contains("."))) {
+            if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, 
+                    "El email es obligatorio", 
+                    "Campo requerido", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtEmail.requestFocus();
+                return;
+            }
+            
+            // Validar email básico
+            if (!email.contains("@") || !email.contains(".")) {
                 JOptionPane.showMessageDialog(this, 
                     "Por favor ingrese un email válido", 
                     "Email inválido", 
@@ -160,8 +226,9 @@ public class ClienteForm extends JDialog {
                 // Nuevo cliente
                 Cliente nuevoCliente = new Cliente(
                     txtNombre.getText().trim(),
-                    txtTelefono.getText().trim().isEmpty() ? null : txtTelefono.getText().trim(),
-                    email.isEmpty() ? null : email
+                    dni,
+                    telefono,
+                    email
                 );
                 
                 if (clienteDAO.guardar(nuevoCliente)) {
@@ -181,8 +248,9 @@ public class ClienteForm extends JDialog {
             } else {
                 // Actualizar cliente existente
                 clienteEditando.setNombre(txtNombre.getText().trim());
-                clienteEditando.setTelefono(txtTelefono.getText().trim().isEmpty() ? null : txtTelefono.getText().trim());
-                clienteEditando.setEmail(email.isEmpty() ? null : email);
+                clienteEditando.setDni(dni);
+                clienteEditando.setTelefono(telefono);
+                clienteEditando.setEmail(email);
                 
                 if (clienteDAO.actualizar(clienteEditando)) {
                     clienteGuardado = true;
@@ -249,19 +317,23 @@ public class ClienteForm extends JDialog {
         if (clienteEditando == null) {
             // Cliente nuevo - hay cambios si algún campo tiene texto
             return !txtNombre.getText().trim().isEmpty() ||
+                   !txtDni.getText().trim().isEmpty() ||
                    !txtTelefono.getText().trim().isEmpty() ||
                    !txtEmail.getText().trim().isEmpty();
         } else {
             // Cliente existente - comparar valores
             String nombreActual = txtNombre.getText().trim();
+            String dniActual = txtDni.getText().trim();
             String telefonoActual = txtTelefono.getText().trim();
             String emailActual = txtEmail.getText().trim();
             
             String nombreOriginal = clienteEditando.getNombre() != null ? clienteEditando.getNombre() : "";
+            String dniOriginal = clienteEditando.getDni() != null ? clienteEditando.getDni() : "";
             String telefonoOriginal = clienteEditando.getTelefono() != null ? clienteEditando.getTelefono() : "";
             String emailOriginal = clienteEditando.getEmail() != null ? clienteEditando.getEmail() : "";
             
             return !nombreActual.equals(nombreOriginal) ||
+                   !dniActual.equals(dniOriginal) ||
                    !telefonoActual.equals(telefonoOriginal) ||
                    !emailActual.equals(emailOriginal);
         }

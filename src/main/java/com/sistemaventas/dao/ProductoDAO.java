@@ -1,5 +1,3 @@
-//Puente entre java y base de datos
-
 package com.sistemaventas.dao;
 
 import com.sistemaventas.modelo.Producto;
@@ -9,6 +7,40 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object (DAO) para la gestión de operaciones CRUD de Producto.
+ * <p>
+ * Esta clase proporciona métodos para realizar operaciones de base de datos
+ * relacionadas con la entidad Producto, incluyendo crear, leer, actualizar
+ * y eliminar registros. Implementa el patrón DAO para separar la lógica
+ * de acceso a datos de la lógica de negocio.
+ * </p>
+ * 
+ * <p><strong>Operaciones soportadas:</strong></p>
+ * <ul>
+ *   <li>Crear nuevos productos</li>
+ *   <li>Buscar productos por ID o nombre</li>
+ *   <li>Obtener todos los productos</li>
+ *   <li>Actualizar información de productos existentes</li>
+ *   <li>Eliminar productos</li>
+ *   <li>Actualizar stock de productos</li>
+ * </ul>
+ * 
+ * <p><strong>Características técnicas:</strong></p>
+ * <ul>
+ *   <li>Utiliza PreparedStatement para prevenir inyección SQL</li>
+ *   <li>Manejo de BigDecimal para precisión monetaria</li>
+ *   <li>Mapeo automático de ResultSet a objetos Producto</li>
+ *   <li>Gestión automática de recursos con try-with-resources</li>
+ *   <li>Operaciones específicas para gestión de inventario</li>
+ * </ul>
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
+ * @version 1.0
+ * @since 1.0
+ * @see com.sistemaventas.modelo.Producto
+ * @see com.sistemaventas.util.ConexionDB
+ */
 public class ProductoDAO {
     
     public boolean guardar(Producto producto) throws SQLException {

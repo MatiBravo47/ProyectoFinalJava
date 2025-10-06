@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ClienteTableModel extends AbstractTableModel {
     
-    private String[] columns = {"ID", "Nombre", "Teléfono", "Email"};
+    private String[] columns = {"ID", "Nombre", "DNI", "Teléfono", "Email"};
     private List<Cliente> clientes = new ArrayList<>();
     private ClienteDAO clienteDAO = new ClienteDAO();
     
@@ -101,8 +101,9 @@ public class ClienteTableModel extends AbstractTableModel {
         switch (col) {
             case 0: return cliente.getIdCliente();
             case 1: return cliente.getNombre();
-            case 2: return cliente.getTelefono() != null ? cliente.getTelefono() : "";
-            case 3: return cliente.getEmail() != null ? cliente.getEmail() : "";
+            case 2: return cliente.getDni() != null ? cliente.getDni() : "";
+            case 3: return cliente.getTelefono() != null ? cliente.getTelefono() : "";
+            case 4: return cliente.getEmail() != null ? cliente.getEmail() : "";
             default: return null;
         }
     }
@@ -113,7 +114,8 @@ public class ClienteTableModel extends AbstractTableModel {
             case 0: return Integer.class;
             case 1:
             case 2:
-            case 3: return String.class;
+            case 3:
+            case 4: return String.class;
             default: return Object.class;
         }
     }

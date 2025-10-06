@@ -28,6 +28,12 @@
             <version>3.44.1.0</version>
         </dependency>
         
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+        
         <!-- JUnit para tests unitarios -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -68,6 +74,83 @@
             </plugin>
 
 
+            
+            <!-- Plugin para generar Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                    <doclint>none</doclint>
+                    <show>private</show>
+                    <nohelp>true</nohelp>
+                    <windowtitle>Sistema de Ventas de Sanitarios - API Documentation</windowtitle>
+                    <doctitle>Sistema de Ventas de Sanitarios v${project.version}</doctitle>
+                    <header>Sistema de Ventas de Sanitarios</header>
+                    <footer>Sistema de Ventas de Sanitarios - Desarrollado por Matías Bravo, Tomás Llera y Alan Barbera</footer>
+                    <bottom>Copyright © 2024 Sistema de Ventas de Sanitarios. Todos los derechos reservados.</bottom>
+                    <tags>
+                        <tag>
+                            <name>author</name>
+                            <placement>a</placement>
+                            <head>Autor:</head>
+                        </tag>
+                        <tag>
+                            <name>version</name>
+                            <placement>a</placement>
+                            <head>Versión:</head>
+                        </tag>
+                        <tag>
+                            <name>since</name>
+                            <placement>a</placement>
+                            <head>Desde:</head>
+                        </tag>
+                        <tag>
+                            <name>see</name>
+                            <placement>a</placement>
+                            <head>Ver también:</head>
+                        </tag>
+                        <tag>
+                            <name>param</name>
+                            <placement>a</placement>
+                            <head>Parámetros:</head>
+                        </tag>
+                        <tag>
+                            <name>return</name>
+                            <placement>a</placement>
+                            <head>Retorna:</head>
+                        </tag>
+                        <tag>
+                            <name>throws</name>
+                            <placement>a</placement>
+                            <head>Lanza:</head>
+                        </tag>
+                        <tag>
+                            <name>exception</name>
+                            <placement>a</placement>
+                            <head>Excepción:</head>
+                        </tag>
+                    </tags>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <additionalJOptions>
+                        <additionalJOption>-J-Duser.language=es</additionalJOption>
+                        <additionalJOption>-J-Duser.country=AR</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             
             <!-- Plugin para crear JAR ejecutable -->
             <plugin>
