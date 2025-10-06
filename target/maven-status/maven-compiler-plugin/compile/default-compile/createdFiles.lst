@@ -26,6 +26,7 @@ com\sistemaventas\vista\tables\ProductoTableModel.class
 com\sistemaventas\excepcion\VentaException$FechaVentaInvalidaException.class
 com\sistemaventas\excepcion\VentaException$VentaNoActualizadaException.class
 com\sistemaventas\excepcion\VentaException$ConflictoStockException.class
+com\sistemaventas\exceptions\SistemaVentasException.class
 com\sistemaventas\excepcion\ProductoException$ProductoNoGuardadoException.class
 com\sistemaventas\excepcion\SistemaVentasException.class
 com\sistemaventas\vista\producto\ProductoView$1.class

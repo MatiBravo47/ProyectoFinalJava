@@ -137,8 +137,9 @@ public class ConexionDB {
                 CREATE TABLE IF NOT EXISTS clientes (
                     id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
                     nombre VARCHAR(100) NOT NULL,
-                    telefono VARCHAR(20),
-                    email VARCHAR(100) UNIQUE
+                    dni VARCHAR(8) NOT NULL UNIQUE,
+                    telefono VARCHAR(10) NOT NULL,
+                    email VARCHAR(100) NOT NULL UNIQUE
                 )
             """;
             
@@ -162,12 +163,98 @@ public class ConexionDB {
             stmt.execute(sqlClientes);
             stmt.execute(sqlVentas);
             
+            // Migrar estructura de base de datos existente si es necesario
+            migrarBaseDatosSiEsNecesario(conn);
             
             // Insertar datos de prueba solo si las tablas están vacías
             insertarDatosPruebaSiEsNecesario(conn);
             
         } catch (SQLException e) {
             throw new SQLException("Error al crear tablas: " + e.getMessage(), e);
+        }
+    }
+    
+    /**
+     * Migra la estructura de la base de datos si es necesario
+     */
+    private static void migrarBaseDatosSiEsNecesario(Connection conn) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            
+            // Verificar si la columna DNI existe en la tabla clientes
+            try {
+                stmt.executeQuery("SELECT dni FROM clientes LIMIT 1");
+                // Si no hay error, la columna ya existe
+                System.out.println("Columna DNI ya existe en la tabla clientes");
+            } catch (SQLException e) {
+                if (e.getMessage().contains("no such column: dni")) {
+                    System.out.println("Migrando tabla clientes: agregando columna DNI...");
+                    
+                    // Agregar columna DNI
+                    stmt.execute("ALTER TABLE clientes ADD COLUMN dni VARCHAR(8)");
+                    
+                    // Actualizar registros existentes con DNI temporal
+                    stmt.execute("UPDATE clientes SET dni = '00000000' WHERE dni IS NULL");
+                    
+                    // Hacer la columna NOT NULL
+                    // SQLite no soporta ALTER COLUMN, así que necesitamos recrear la tabla
+                    migrarTablaClientesCompleta(conn);
+                    
+                    System.out.println("Migración completada: columna DNI agregada");
+                }
+            }
+            
+            // Verificar si los campos telefono y email son NOT NULL
+            // Esto se maneja en la migración completa de la tabla
+            
+        } catch (SQLException e) {
+            System.out.println("Advertencia: Error durante la migración: " + e.getMessage());
+            // No lanzar la excepción para no interrumpir el funcionamiento
+        }
+    }
+    
+    /**
+     * Migra completamente la tabla clientes para agregar restricciones NOT NULL
+     */
+    private static void migrarTablaClientesCompleta(Connection conn) throws SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            
+            // Crear tabla temporal con la nueva estructura
+            String sqlNuevaTabla = """
+                CREATE TABLE clientes_nueva (
+                    id_cliente INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nombre VARCHAR(100) NOT NULL,
+                    dni VARCHAR(8) NOT NULL UNIQUE,
+                    telefono VARCHAR(10) NOT NULL,
+                    email VARCHAR(100) NOT NULL UNIQUE
+                )
+            """;
+            
+            stmt.execute(sqlNuevaTabla);
+            
+            // Copiar datos existentes, asignando valores por defecto donde sea necesario
+            String sqlCopiarDatos = """
+                INSERT INTO clientes_nueva (id_cliente, nombre, dni, telefono, email)
+                SELECT 
+                    id_cliente,
+                    nombre,
+                    COALESCE(dni, '00000000') as dni,
+                    COALESCE(telefono, '0000000000') as telefono,
+                    COALESCE(email, 'sin@email.com') as email
+                FROM clientes
+            """;
+            
+            stmt.execute(sqlCopiarDatos);
+            
+            // Eliminar tabla antigua
+            stmt.execute("DROP TABLE clientes");
+            
+            // Renombrar tabla nueva
+            stmt.execute("ALTER TABLE clientes_nueva RENAME TO clientes");
+            
+            System.out.println("Tabla clientes migrada completamente");
+            
+        } catch (SQLException e) {
+            throw new SQLException("Error durante la migración completa de la tabla clientes: " + e.getMessage(), e);
         }
     }
     
@@ -194,10 +281,10 @@ public class ConexionDB {
                 
                 // Insertar clientes de prueba
                 String insertClientes = """
-                    INSERT INTO clientes (nombre, telefono, email) VALUES 
-                    ('Juan Pérez', '011-4567-8901', 'juan.perez@email.com'),
-                    ('María García', '011-2345-6789', 'maria.garcia@email.com'),
-                    ('Carlos López', '011-8765-4321', 'carlos.lopez@email.com');
+                    INSERT INTO clientes (nombre, dni, telefono, email) VALUES 
+                    ('Juan Pérez', '12345678', '0114567890', 'juan.perez@email.com'),
+                    ('María García', '87654321', '0112345678', 'maria.garcia@email.com'),
+                    ('Carlos López', '11223344', '0118765432', 'carlos.lopez@email.com');
                 """;
                 
                 stmt.execute(insertProductos);

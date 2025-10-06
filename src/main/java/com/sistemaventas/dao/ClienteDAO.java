@@ -14,7 +14,7 @@ import java.util.List;
 public class ClienteDAO {
     
     public boolean guardar(Cliente cliente) throws SQLException {
-        String sql = "INSERT INTO clientes (nombre, telefono, email) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO clientes (nombre, dni, telefono, email) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -23,8 +23,9 @@ public class ClienteDAO {
             conn.setAutoCommit(false);
             
             pstmt.setString(1, cliente.getNombre());
-            pstmt.setString(2, cliente.getTelefono());
-            pstmt.setString(3, cliente.getEmail());
+            pstmt.setString(2, cliente.getDni());
+            pstmt.setString(3, cliente.getTelefono());
+            pstmt.setString(4, cliente.getEmail());
             
             int filasAfectadas = pstmt.executeUpdate();
             
@@ -95,7 +96,7 @@ public class ClienteDAO {
     }
     
     public boolean actualizar(Cliente cliente) throws SQLException {
-        String sql = "UPDATE clientes SET nombre = ?, telefono = ?, email = ? WHERE id_cliente = ?";
+        String sql = "UPDATE clientes SET nombre = ?, dni = ?, telefono = ?, email = ? WHERE id_cliente = ?";
         
         try (Connection conn = ConexionDB.getConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -103,9 +104,10 @@ public class ClienteDAO {
             conn.setAutoCommit(false);
             
             pstmt.setString(1, cliente.getNombre());
-            pstmt.setString(2, cliente.getTelefono());
-            pstmt.setString(3, cliente.getEmail());
-            pstmt.setInt(4, cliente.getIdCliente());
+            pstmt.setString(2, cliente.getDni());
+            pstmt.setString(3, cliente.getTelefono());
+            pstmt.setString(4, cliente.getEmail());
+            pstmt.setInt(5, cliente.getIdCliente());
             
             int filasAfectadas = pstmt.executeUpdate();
             
@@ -198,10 +200,32 @@ public class ClienteDAO {
         }
     }
     
+    public Cliente buscarPorDni(String dni) throws SQLException {
+        String sql = "SELECT * FROM clientes WHERE dni = ?";
+        
+        try (Connection conn = ConexionDB.getConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, dni);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapearCliente(rs);
+                }
+            }
+            
+            return null;
+            
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+    
     private Cliente mapearCliente(ResultSet rs) throws SQLException {
         return new Cliente(
             rs.getInt("id_cliente"),
             rs.getString("nombre"),
+            rs.getString("dni"),
             rs.getString("telefono"),
             rs.getString("email")
         );

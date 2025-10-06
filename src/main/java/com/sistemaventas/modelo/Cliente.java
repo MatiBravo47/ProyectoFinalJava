@@ -11,21 +11,24 @@ public class Cliente {
     
     public int idCliente;
     private String nombre;
+    private String dni;
     private String telefono;
     private String email;
 
     public Cliente() {
     }
 
-    public Cliente(String nombre, String telefono, String email) {
+    public Cliente(String nombre, String dni, String telefono, String email) {
         this.nombre = nombre;
+        this.dni = dni;
         this.telefono = telefono;
         this.email = email;
     }
 
-    public Cliente(int idCliente, String nombre, String telefono, String email) {
+    public Cliente(int idCliente, String nombre, String dni, String telefono, String email) {
         this.idCliente = idCliente;
         this.nombre = nombre;
+        this.dni = dni;
         this.telefono = telefono;
         this.email = email;
     }
@@ -44,6 +47,14 @@ public class Cliente {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
     public String getTelefono() {
@@ -67,6 +78,7 @@ public class Cliente {
         int hash = 7;
         hash = 59 * hash + this.idCliente;
         hash = 59 * hash + Objects.hashCode(this.nombre);
+        hash = 59 * hash + Objects.hashCode(this.dni);
         hash = 59 * hash + Objects.hashCode(this.telefono);
         hash = 59 * hash + Objects.hashCode(this.email);
         return hash;
@@ -88,6 +100,9 @@ public class Cliente {
             return false;
         }
         if (!Objects.equals(this.nombre, other.nombre)) {
+            return false;
+        }
+        if (!Objects.equals(this.dni, other.dni)) {
             return false;
         }
         if (!Objects.equals(this.telefono, other.telefono)) {
