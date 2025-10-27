@@ -1,236 +1,89 @@
 package com.sistemaventas.modelo;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
  * Clase modelo que representa una Venta en el sistema de gestión de ventas.
- * <p>
- * Esta clase encapsula toda la información relacionada con una transacción
- * de venta, incluyendo datos del cliente, producto, cantidades y totales.
- * Utiliza BigDecimal para manejo preciso de valores monetarios.
- * </p>
- * 
- * <p><strong>Características principales:</strong></p>
- * <ul>
- *   <li>Identificador único autoincremental</li>
- *   <li>Fecha de la venta con validación</li>
- *   <li>Referencias a cliente y producto</li>
- *   <li>Cálculo automático de totales</li>
- *   <li>Campos auxiliares para visualización</li>
- * </ul>
- * 
- * <p><strong>Campos de visualización:</strong></p>
- * <p>
- * Los campos nombreCliente y nombreProducto son auxiliares y no se
- * persisten en la base de datos. Se utilizan únicamente para mostrar
- * información legible en las interfaces de usuario.
- * </p>
+ * Refactorizada para usar objetos Cliente y Producto en lugar de solo IDs.
  * 
  * @author Matías Bravo, Tomás Llera, Alan Barbera
- * @version 1.0
- * @since 1.0
- * @see java.math.BigDecimal
- * @see java.time.LocalDate
+ * @version 2.0
  */
 public class Venta {
     
-    /**
-     * Identificador único de la venta en la base de datos.
-     * <p>
-     * Este campo es autoincremental y se asigna automáticamente
-     * cuando se persiste la venta por primera vez.
-     * </p>
-     */
     private int idVenta;
-    
-    /**
-     * Fecha en que se realizó la venta.
-     * <p>
-     * Campo obligatorio que registra cuándo ocurrió la transacción.
-     * No puede ser nulo.
-     * </p>
-     */
     private LocalDate fecha;
-    
-    /**
-     * Identificador del cliente que realizó la compra.
-     * <p>
-     * Referencia al cliente en la tabla clientes.
-     * Debe ser un ID válido mayor a cero.
-     * </p>
-     */
-    private int idCliente;
-    
-    /**
-     * Identificador del producto vendido.
-     * <p>
-     * Referencia al producto en la tabla productos.
-     * Debe ser un ID válido mayor a cero.
-     * </p>
-     */
-    private int idProducto;
-    
-    /**
-     * Cantidad de productos vendidos.
-     * <p>
-     * Debe ser un número entero positivo mayor a cero.
-     * Se utiliza para calcular el total de la venta.
-     * </p>
-     */
+    private Cliente cliente;
+    private Producto producto;
     private int cantidad;
-    
-    /**
-     * Precio unitario del producto al momento de la venta.
-     * <p>
-     * Utiliza BigDecimal para precisión en cálculos monetarios.
-     * Debe ser mayor a cero. Se multiplica por la cantidad
-     * para obtener el total.
-     * </p>
-     */
     private BigDecimal precioUnitario;
-    
-    /**
-     * Total calculado de la venta.
-     * <p>
-     * Representa el monto total de la transacción.
-     * Se calcula como precioUnitario × cantidad.
-     * Debe ser mayor a cero.
-     * </p>
-     */
     private BigDecimal total;
     
     /**
-     * Nombre del cliente (campo auxiliar para visualización).
-     * <p>
-     * Este campo no se persiste en la base de datos.
-     * Se utiliza únicamente para mostrar información
-     * legible en las interfaces de usuario.
-     * </p>
-     */
-    private String nombreCliente;
-    
-    /**
-     * Nombre del producto (campo auxiliar para visualización).
-     * <p>
-     * Este campo no se persiste en la base de datos.
-     * Se utiliza únicamente para mostrar información
-     * legible en las interfaces de usuario.
-     * </p>
-     */
-    private String nombreProducto;
-    
-    /**
      * Constructor por defecto.
-     * <p>
-     * Crea una instancia vacía de Venta. Los campos
-     * deben ser establecidos mediante los métodos setter
-     * correspondientes.
-     * </p>
      */
     public Venta() {
+        this.fecha = LocalDate.now();
     }
     
     /**
-     * Constructor para crear una nueva venta.
-     * <p>
-     * Este constructor se utiliza cuando se crea una venta
-     * que aún no ha sido persistida en la base de datos.
-     * El idVenta será asignado automáticamente por la BD.
-     * </p>
+     * Constructor para crear una nueva venta (sin ID).
      * 
-     * @param fecha         Fecha de la venta (no puede ser nula)
-     * @param idCliente     ID del cliente (debe ser mayor a cero)
-     * @param idProducto    ID del producto (debe ser mayor a cero)
-     * @param cantidad      Cantidad vendida (debe ser mayor a cero)
-     * @param precioUnitario Precio unitario (debe ser mayor a cero)
-     * @param total         Total de la venta (debe ser mayor a cero)
-     * 
-     * @throws IllegalArgumentException si algún parámetro es inválido
+     * @param fecha Fecha de la venta
+     * @param cliente Cliente que realiza la compra
+     * @param producto Producto vendido
+     * @param cantidad Cantidad vendida
+     * @param precioUnitario Precio unitario al momento de la venta
      */
-    public Venta(LocalDate fecha, int idCliente, int idProducto, int cantidad, 
-                 BigDecimal precioUnitario, BigDecimal total) {
-        this.fecha = fecha;
-        this.idCliente = idCliente;
-        this.idProducto = idProducto;
+    public Venta(LocalDate fecha, Cliente cliente, Producto producto, int cantidad, BigDecimal precioUnitario) {
+        this.fecha = fecha != null ? fecha : LocalDate.now();
+        this.cliente = cliente;
+        this.producto = producto;
         this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.total = total;
+        this.precioUnitario = precioUnitario.setScale(2, RoundingMode.HALF_UP);
+        this.total = calcularTotal();
     }
     
     /**
-     * Constructor completo para una venta existente.
-     * <p>
-     * Este constructor se utiliza cuando se recupera una venta
-     * de la base de datos y se necesita crear la instancia
-     * con todos sus datos, incluyendo el ID.
-     * </p>
+     * Constructor completo para una venta existente (con ID).
      * 
-     * @param idVenta       Identificador único de la venta en la BD
-     * @param fecha         Fecha de la venta
-     * @param idCliente     ID del cliente
-     * @param idProducto    ID del producto
-     * @param cantidad      Cantidad vendida
+     * @param idVenta ID de la venta
+     * @param fecha Fecha de la venta
+     * @param cliente Cliente que realizó la compra
+     * @param producto Producto vendido
+     * @param cantidad Cantidad vendida
      * @param precioUnitario Precio unitario
-     * @param total         Total de la venta
-     * 
-     * @throws IllegalArgumentException si algún parámetro es inválido
+     * @param total Total de la venta
      */
-    public Venta(int idVenta, LocalDate fecha, int idCliente, int idProducto, 
+    public Venta(int idVenta, LocalDate fecha, Cliente cliente, Producto producto, 
                  int cantidad, BigDecimal precioUnitario, BigDecimal total) {
         this.idVenta = idVenta;
-        this.fecha = fecha;
-        this.idCliente = idCliente;
-        this.idProducto = idProducto;
+        this.fecha = fecha != null ? fecha : LocalDate.now();
+        this.cliente = cliente;
+        this.producto = producto;
         this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
-        this.total = total;
+        this.precioUnitario = precioUnitario.setScale(2, RoundingMode.HALF_UP);
+        this.total = total.setScale(2, RoundingMode.HALF_UP);
     }
     
     // Getters y Setters
     
-    /**
-     * Obtiene el identificador único de la venta.
-     * 
-     * @return el ID de la venta en la base de datos
-     */
     public int getIdVenta() {
         return idVenta;
     }
     
-    /**
-     * Establece el identificador único de la venta.
-     * <p>
-     * Este método se utiliza principalmente cuando se recupera
-     * una venta de la base de datos.
-     * </p>
-     * 
-     * @param idVenta el ID único de la venta
-     */
     public void setIdVenta(int idVenta) {
         this.idVenta = idVenta;
     }
     
-    /**
-     * Obtiene la fecha de la venta.
-     * 
-     * @return la fecha de la venta, puede ser null si no se ha establecido
-     */
     public LocalDate getFecha() {
         return fecha;
     }
     
-    /**
-     * Establece la fecha de la venta.
-     * <p>
-     * La fecha no puede ser nula ya que es un campo obligatorio
-     * para registrar cuándo ocurrió la transacción.
-     * </p>
-     * 
-     * @param fecha la fecha de la venta (no puede ser nula)
-     * @throws IllegalArgumentException si la fecha es nula
-     */
     public void setFecha(LocalDate fecha) {
         if (fecha == null) {
             throw new IllegalArgumentException("La fecha no puede ser nula");
@@ -238,223 +91,146 @@ public class Venta {
         this.fecha = fecha;
     }
     
-    /**
-     * Obtiene el identificador del cliente.
-     * 
-     * @return el ID del cliente que realizó la compra
-     */
-    public int getIdCliente() {
-        return idCliente;
+    public String getFechaFormateada() {
+        return fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
     
-    /**
-     * Establece el identificador del cliente.
-     * <p>
-     * El ID del cliente debe ser mayor a cero ya que representa
-     * una referencia válida a un cliente existente.
-     * </p>
-     * 
-     * @param idCliente el ID del cliente (debe ser mayor a cero)
-     * @throws IllegalArgumentException si el ID del cliente es menor o igual a cero
-     */
-    public void setIdCliente(int idCliente) {
-        if (idCliente <= 0) {
-            throw new IllegalArgumentException("El ID del cliente debe ser mayor a cero");
+    public Cliente getCliente() {
+        return cliente;
+    }
+    
+    public void setCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("El cliente no puede ser nulo");
         }
-        this.idCliente = idCliente;
+        this.cliente = cliente;
     }
     
-    /**
-     * Obtiene el identificador del producto.
-     * 
-     * @return el ID del producto vendido
-     */
-    public int getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
     
-    /**
-     * Establece el identificador del producto.
-     * <p>
-     * El ID del producto debe ser mayor a cero ya que representa
-     * una referencia válida a un producto existente.
-     * </p>
-     * 
-     * @param idProducto el ID del producto (debe ser mayor a cero)
-     * @throws IllegalArgumentException si el ID del producto es menor o igual a cero
-     */
-    public void setIdProducto(int idProducto) {
-        if (idProducto <= 0) {
-            throw new IllegalArgumentException("El ID del producto debe ser mayor a cero");
+    public void setProducto(Producto producto) {
+        if (producto == null) {
+            throw new IllegalArgumentException("El producto no puede ser nulo");
         }
-        this.idProducto = idProducto;
+        this.producto = producto;
     }
     
-    /**
-     * Obtiene la cantidad vendida.
-     * 
-     * @return la cantidad de productos vendidos
-     */
     public int getCantidad() {
         return cantidad;
     }
     
-    /**
-     * Establece la cantidad vendida.
-     * <p>
-     * La cantidad debe ser mayor a cero ya que representa
-     * una transacción válida de venta.
-     * </p>
-     * 
-     * @param cantidad la cantidad vendida (debe ser mayor a cero)
-     * @throws IllegalArgumentException si la cantidad es menor o igual a cero
-     */
     public void setCantidad(int cantidad) {
         if (cantidad <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor a cero");
         }
         this.cantidad = cantidad;
+        recalcularTotal();
     }
     
-    /**
-     * Obtiene el precio unitario del producto.
-     * 
-     * @return el precio unitario al momento de la venta
-     */
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
     
-    /**
-     * Establece el precio unitario del producto.
-     * <p>
-     * El precio unitario debe ser mayor a cero ya que representa
-     * el valor de cada unidad del producto vendido.
-     * </p>
-     * 
-     * @param precioUnitario el precio unitario (debe ser mayor a cero)
-     * @throws IllegalArgumentException si el precio unitario es nulo o menor o igual a cero
-     */
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         if (precioUnitario == null || precioUnitario.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El precio unitario debe ser mayor a cero");
         }
-        this.precioUnitario = precioUnitario;
+        this.precioUnitario = precioUnitario.setScale(2, RoundingMode.HALF_UP);
+        recalcularTotal();
     }
     
-    /**
-     * Obtiene el total de la venta.
-     * 
-     * @return el monto total de la transacción
-     */
     public BigDecimal getTotal() {
         return total;
     }
     
-    /**
-     * Establece el total de la venta.
-     * <p>
-     * El total debe ser mayor a cero ya que representa
-     * el monto total de la transacción.
-     * </p>
-     * 
-     * @param total el total de la venta (debe ser mayor a cero)
-     * @throws IllegalArgumentException si el total es nulo o menor o igual a cero
-     */
     public void setTotal(BigDecimal total) {
         if (total == null || total.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("El total debe ser mayor a cero");
         }
-        this.total = total;
+        this.total = total.setScale(2, RoundingMode.HALF_UP);
+    }
+    
+    // Métodos de utilidad para compatibilidad con código existente
+    
+    /**
+     * Obtiene el ID del cliente (método de compatibilidad).
+     * @return ID del cliente o 0 si el cliente es nulo
+     */
+    public int getIdCliente() {
+        return cliente != null ? cliente.getIdCliente() : 0;
     }
     
     /**
-     * Obtiene el nombre del cliente (campo auxiliar).
-     * 
-     * @return el nombre del cliente para visualización
+     * Obtiene el ID del producto (método de compatibilidad).
+     * @return ID del producto o 0 si el producto es nulo
+     */
+    public int getIdProducto() {
+        return producto != null ? producto.getIdProducto() : 0;
+    }
+    
+    /**
+     * Obtiene el nombre del cliente.
+     * @return Nombre del cliente o null si el cliente es nulo
      */
     public String getNombreCliente() {
-        return nombreCliente;
+        return cliente != null ? cliente.getNombre() : null;
     }
     
     /**
-     * Establece el nombre del cliente (campo auxiliar).
-     * <p>
-     * Este campo se utiliza únicamente para visualización
-     * y no se persiste en la base de datos.
-     * </p>
-     * 
-     * @param nombreCliente el nombre del cliente para mostrar
-     */
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
-    
-    /**
-     * Obtiene el nombre del producto (campo auxiliar).
-     * 
-     * @return el nombre del producto para visualización
+     * Obtiene el nombre del producto.
+     * @return Nombre del producto o null si el producto es nulo
      */
     public String getNombreProducto() {
-        return nombreProducto;
+        return producto != null ? producto.getNombre() : null;
     }
     
-    /**
-     * Establece el nombre del producto (campo auxiliar).
-     * <p>
-     * Este campo se utiliza únicamente para visualización
-     * y no se persiste en la base de datos.
-     * </p>
-     * 
-     * @param nombreProducto el nombre del producto para mostrar
-     */
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
-    }
+    // Métodos de cálculo
     
     /**
-     * Calcula el total de la venta basado en cantidad y precio unitario.
-     * <p>
-     * Este método multiplica el precio unitario por la cantidad vendida
-     * para obtener el total de la transacción. Si alguno de los valores
-     * no está disponible, retorna cero.
-     * </p>
-     * 
-     * @return el total calculado (precioUnitario × cantidad) o BigDecimal.ZERO si no hay datos válidos
+     * Calcula el total de la venta.
+     * @return Total calculado (precioUnitario × cantidad)
      */
     public BigDecimal calcularTotal() {
         if (precioUnitario != null && cantidad > 0) {
-            return precioUnitario.multiply(BigDecimal.valueOf(cantidad));
+            return precioUnitario.multiply(BigDecimal.valueOf(cantidad))
+                               .setScale(2, RoundingMode.HALF_UP);
         }
         return BigDecimal.ZERO;
     }
     
     /**
-     * Devuelve una representación en cadena de la venta.
-     * <p>
-     * Incluye todos los campos principales de la venta en un formato
-     * legible para debugging y logging.
-     * </p>
-     * 
-     * @return una cadena que representa la venta
+     * Recalcula el total cuando cambian cantidad o precio unitario.
      */
-    @Override
-    public String toString() {
-        return String.format("Venta{id=%d, fecha=%s, cliente=%d, producto=%d, cantidad=%d, total=$%.2f}", 
-                           idVenta, fecha, idCliente, idProducto, cantidad, total);
+    public void recalcularTotal() {
+        this.total = calcularTotal();
     }
     
     /**
-     * Compara esta venta con otro objeto para determinar si son iguales.
-     * <p>
-     * Dos ventas se consideran iguales si tienen el mismo ID.
-     * Esto es consistente con el hecho de que el ID es único en la BD.
-     * </p>
-     * 
-     * @param obj el objeto a comparar con esta venta
-     * @return true si los objetos son iguales, false en caso contrario
-     * @see #hashCode()
+     * Valida que la venta tenga todos los datos necesarios.
+     * @return true si la venta es válida
      */
+    public boolean esValida() {
+        return fecha != null 
+            && cliente != null 
+            && producto != null 
+            && cantidad > 0 
+            && precioUnitario != null 
+            && precioUnitario.compareTo(BigDecimal.ZERO) > 0;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("Venta{id=%d, fecha=%s, cliente='%s', producto='%s', cantidad=%d, total=$%.2f}", 
+                           idVenta, 
+                           fecha, 
+                           cliente != null ? cliente.getNombre() : "null",
+                           producto != null ? producto.getNombre() : "null",
+                           cantidad, 
+                           total);
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -464,16 +240,6 @@ public class Venta {
         return idVenta == venta.idVenta;
     }
     
-    /**
-     * Calcula el código hash para esta venta.
-     * <p>
-     * El código hash se basa únicamente en el ID de la venta,
-     * ya que es el campo que determina la igualdad.
-     * </p>
-     * 
-     * @return el código hash calculado para esta venta
-     * @see #equals(Object)
-     */
     @Override
     public int hashCode() {
         return Objects.hash(idVenta);

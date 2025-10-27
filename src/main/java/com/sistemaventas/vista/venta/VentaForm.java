@@ -16,8 +16,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Formulario para registrar ventas
- * @author Matt_
+ * Formulario refactorizado para registrar ventas
+ * Ahora trabaja con objetos Cliente y Producto completos
+ * 
+ * @author Matías Bravo, Tomás Llera, Alan Barbera
+ * @version 2.0
  */
 public class VentaForm extends JDialog {
     
@@ -33,6 +36,9 @@ public class VentaForm extends JDialog {
     private VentaController ventaController;
     private ClienteDAO clienteDAO;
     private ProductoDAO productoDAO;
+    
+    // Cache de productos para evitar consultas repetidas
+    private Producto productoSeleccionado = null;
     
     public VentaForm(JFrame owner) {
         super(owner, "Registrar Nueva Venta", true);
@@ -241,20 +247,20 @@ public class VentaForm extends JDialog {
         
         if (itemSeleccionado != null && itemSeleccionado.getId() > 0) {
             try {
-                Producto producto = productoDAO.buscarPorId(itemSeleccionado.getId());
+                productoSeleccionado = productoDAO.buscarPorId(itemSeleccionado.getId());
                 
-                if (producto != null) {
-                    txtPrecioUnitario.setText(producto.getPrecio().toString());
-                    lblStockDisponible.setText(String.format("Stock disponible: %d unidades", producto.getStock()));
+                if (productoSeleccionado != null) {
+                    txtPrecioUnitario.setText(productoSeleccionado.getPrecio().toString());
+                    lblStockDisponible.setText(String.format("Stock disponible: %d unidades", productoSeleccionado.getStock()));
                     
                     // Ajustar el límite del spinner según el stock
                     SpinnerNumberModel model = (SpinnerNumberModel) spnCantidad.getModel();
-                    model.setMaximum(producto.getStock());
+                    model.setMaximum(productoSeleccionado.getStock() > 0 ? productoSeleccionado.getStock() : 1);
                     
                     // Si la cantidad actual excede el stock, ajustarla
                     int cantidadActual = (Integer) spnCantidad.getValue();
-                    if (cantidadActual > producto.getStock()) {
-                        spnCantidad.setValue(Math.min(1, producto.getStock()));
+                    if (cantidadActual > productoSeleccionado.getStock()) {
+                        spnCantidad.setValue(Math.max(1, Math.min(cantidadActual, productoSeleccionado.getStock())));
                     }
                     
                     calcularTotal();
@@ -267,6 +273,7 @@ public class VentaForm extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
             }
         } else {
+            productoSeleccionado = null;
             txtPrecioUnitario.setText("");
             txtTotal.setText("");
             lblStockDisponible.setText("Stock disponible: -");
@@ -274,9 +281,7 @@ public class VentaForm extends JDialog {
     }
     
     private void calcularTotal() {
-        ComboItem itemProducto = (ComboItem) cmbProductos.getSelectedItem();
-        
-        if (itemProducto != null && itemProducto.getId() > 0 && !txtPrecioUnitario.getText().isEmpty()) {
+        if (productoSeleccionado != null && !txtPrecioUnitario.getText().isEmpty()) {
             try {
                 BigDecimal precio = new BigDecimal(txtPrecioUnitario.getText());
                 int cantidad = (Integer) spnCantidad.getValue();
@@ -330,7 +335,7 @@ public class VentaForm extends JDialog {
             
             // Validar producto
             ComboItem itemProducto = (ComboItem) cmbProductos.getSelectedItem();
-            if (itemProducto == null || itemProducto.getId() <= 0) {
+            if (itemProducto == null || itemProducto.getId() <= 0 || productoSeleccionado == null) {
                 JOptionPane.showMessageDialog(this,
                     "Debe seleccionar un producto",
                     "Producto requerido",
@@ -341,27 +346,37 @@ public class VentaForm extends JDialog {
             
             int cantidad = (Integer) spnCantidad.getValue();
             
-            // Verificar stock nuevamente
-            Producto producto = productoDAO.buscarPorId(itemProducto.getId());
-            if (producto.getStock() < cantidad) {
+            // Verificar stock nuevamente (puede haber cambiado)
+            Producto productoActualizado = productoDAO.buscarPorId(itemProducto.getId());
+            if (productoActualizado.getStock() < cantidad) {
                 JOptionPane.showMessageDialog(this,
                     String.format("Stock insuficiente. Disponible: %d, Solicitado: %d",
-                        producto.getStock(), cantidad),
+                        productoActualizado.getStock(), cantidad),
                     "Stock insuficiente",
                     JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
-            // Crear la venta
-            Venta nuevaVenta = new Venta();
-            nuevaVenta.setFecha(fecha);
-            nuevaVenta.setIdCliente(itemCliente.getId());
-            nuevaVenta.setIdProducto(itemProducto.getId());
-            nuevaVenta.setCantidad(cantidad);
-            nuevaVenta.setPrecioUnitario(producto.getPrecio());
-            nuevaVenta.setTotal(nuevaVenta.calcularTotal());
+            // Obtener el cliente completo
+            Cliente cliente = clienteDAO.buscarPorId(itemCliente.getId());
+            if (cliente == null) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: Cliente no encontrado",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
-            // Registrar la venta
+            // Crear la venta con objetos completos
+            Venta nuevaVenta = new Venta(
+                fecha,
+                cliente,
+                productoActualizado,
+                cantidad,
+                productoActualizado.getPrecio()
+            );
+            
+            // Registrar la venta usando el controlador
             if (ventaController.registrarVenta(nuevaVenta)) {
                 ventaGuardada = true;
                 
@@ -371,8 +386,8 @@ public class VentaForm extends JDialog {
                     "Producto: %s\n" +
                     "Cantidad: %d unidades\n" +
                     "Total: $%.2f",
-                    itemCliente.getTexto().split(" - ")[0],
-                    producto.getNombre(),
+                    cliente.getNombre(),
+                    productoActualizado.getNombre(),
                     cantidad,
                     nuevaVenta.getTotal()
                 );
@@ -394,6 +409,7 @@ public class VentaForm extends JDialog {
                 "Error de base de datos: " + e.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(this,
                 e.getMessage(),
@@ -404,6 +420,7 @@ public class VentaForm extends JDialog {
                 "Error inesperado: " + e.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
     
